@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * (User)表控制层
@@ -36,8 +37,9 @@ public class UserController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
-    public User selectOne(Integer id) {
-        LOGGER.info("id : {}",id);
+    public User selectOne(Integer id, HttpServletRequest request) {
+        JWTInfo jwtInfo = JwtTokenUtils.getTokenInfo(request.getHeader("Authorization"));
+        LOGGER.info("用户是：{}",jwtInfo.getUid());
         return this.userService.queryById(id);
     }
 

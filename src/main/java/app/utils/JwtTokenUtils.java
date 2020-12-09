@@ -20,6 +20,7 @@ import java.security.Key;
 public class JwtTokenUtils {
 //    TOKEN 7天过期
     public static final int EXPIRE = 7;
+//    生成一个key，并且对这个key的生成规则进行配置
     private static Key getKeyInstance(){
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         byte[] bytes = DatatypeConverter.parseBase64Binary("autoTest-user");
@@ -32,9 +33,9 @@ public class JwtTokenUtils {
      * @return
      */
     public static String generatorToken(JWTInfo jwtInfo){
+//        生成key，并且将用户uid存储到token中，键为:CommonUtils.JWT_KEY_USER_ID == uid,
         return Jwts.builder().claim(CommonUtils.JWT_KEY_USER_ID,jwtInfo.getUid())
                 .setExpiration(DateTime.now().plusDays(EXPIRE).toDate())
-//                .setExpiration(DateTime.now().plusSeconds(10).toDate())
                 .signWith(SignatureAlgorithm.HS256,getKeyInstance()).compact();
     }
 
@@ -46,6 +47,7 @@ public class JwtTokenUtils {
     public static JWTInfo getTokenInfo(String token){
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(token);
         Claims claims = claimsJws.getBody();
+//        从token中取出uid
         return new JWTInfo(claims.get(CommonUtils.JWT_KEY_USER_ID).toString());
     }
 }
