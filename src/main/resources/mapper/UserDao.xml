@@ -47,7 +47,7 @@
         </where>
     </select>
 
-    <!--新增所有列-->
+    <!--新增用户-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" >
         insert into management_paper.User(user_name, password, status)
         values (#{userName}, #{password}, #{status})
@@ -70,11 +70,12 @@
         where id = #{id}
     </update>
 
-    <!--通过主键删除-->
+    <!--通过主键软删-->
     <update id="deleteById">
         update management_paper.User set status = 0 where id = #{id}
     </update>
 
+    <!--  通过用户名查找用户  -->
     <select id="queryByUserName" resultMap="BaseResultMap">
         select * from management_paper.User where user_name = #{userName} and status = 1
 

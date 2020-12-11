@@ -1,7 +1,8 @@
+#服务器的配置
 server:
   tomcat:
-    uri-encoding: UTF-8
-  port: 80
+    uri-encoding: UTF-8 #使用编码
+  port: 80 #端口号
 #  max-http-header-size: 40960
 
 
@@ -9,21 +10,20 @@ server:
 spring:
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 100MB
+      max-file-size: 10MB # 上传文件的最大值
+      max-request-size: 100MB #request的最大值
   jpa:
-    show-sql: true
-  datasource:
-    #    url: jdbc:mysql://localhost:3306?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC：jdbc:mysql://www.94hmj.com:3306
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    show-sql: true #是否显示sql
+  datasource: #数据源配置
+    driver-class-name: com.mysql.cj.jdbc.Driver #驱动
     username: root
     password: test666
-    type: com.alibaba.druid.pool.DruidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource #数据源类型
     url: jdbc:mysql://www.94hmj.com:3308
   jackson:
-    property-naming-strategy: LOWER_CAMEL_CASE
+    property-naming-strategy: LOWER_CAMEL_CASE #json转换的格式
 
 
 mybatis:
-  type-aliases-package: app.entity.User
-  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: app.entity #dao层实体的路径
+  mapper-locations: classpath:mapper/*.xml #默认读取mapper.xml的路径

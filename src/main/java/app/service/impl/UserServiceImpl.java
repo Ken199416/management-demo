@@ -51,10 +51,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User insert(User user) {
+//        默认创建的用户，状态都设置为1
         user.setStatus(1);
+//        加密密码
         user.setPassword(CommonUtils.encoderPassword(user.getPassword()));
         int len = this.userDao.insert(user);
-        System.out.printf(len + "");
         return user;
     }
 

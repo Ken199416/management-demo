@@ -43,11 +43,14 @@ public class UserController {
         return this.userService.queryById(id);
     }
 
+//    注册接口
     @PostMapping("/register")
     public ResponseData register(@RequestBody User user){
+//        判断用户名是否存在
         if (userService.login(user) != null){
             return new ResponseData(401,"用户名[" + user.getUserName() + "]已存在",null);
         }
+//        用户名不存在，创建用户
          User registerUser = userService.insert(user);
          return new ResponseData(200,"注册成功",registerUser);
     }
@@ -55,7 +58,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseData login(@RequestBody User user){
+//        根据用户名获取对应的用户信息
         User resultUser = userService.login(user);
+//        判断密码是否正确，如正确，将token返回
         if ( resultUser != null && CommonUtils.verifyPassword(user.getPassword(),resultUser.getPassword())){
             String token = JwtTokenUtils.generatorToken(new JWTInfo(resultUser.getId()+""));
             return new ResponseData(10000,"登录成功",token);
@@ -64,8 +69,14 @@ public class UserController {
         return new ResponseData(9999,"登录失败，请检查用户名和密码",null);
     }
 
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
     @GetMapping("/delete")
     public ResponseData delete(Integer id){
+//        删除用户
         if (userService.deleteById(id)){
             return new ResponseData(200,"删除用户成功",null);
         }
