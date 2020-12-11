@@ -45,9 +45,11 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseData register(@RequestBody User user){
+        if (userService.login(user) != null){
+            return new ResponseData(401,"用户名[" + user.getUserName() + "]已存在",null);
+        }
          User registerUser = userService.insert(user);
-         ResponseData responseData = new ResponseData(200,"注册成功",registerUser);
-         return responseData;
+         return new ResponseData(200,"注册成功",registerUser);
     }
 
 
@@ -61,5 +63,18 @@ public class UserController {
         LOGGER.info("登录失败");
         return new ResponseData(9999,"登录失败，请检查用户名和密码",null);
     }
+
+    @GetMapping("/delete")
+    public ResponseData delete(Integer id){
+        if (userService.deleteById(id)){
+            return new ResponseData(200,"删除用户成功",null);
+        }
+        return new ResponseData(401,"删除用户失败,请确认用户的状态",null);
+    }
+
+
+
+
+
 
 }

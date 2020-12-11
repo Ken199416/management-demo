@@ -71,12 +71,12 @@
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from management_paper.User where id = #{id}
-    </delete>
+    <update id="deleteById">
+        update management_paper.User set status = 0 where id = #{id}
+    </update>
 
     <select id="queryByUserName" resultMap="BaseResultMap">
-        select * from management_paper.User where user_name = #{userName}
+        select * from management_paper.User where user_name = #{userName} and status = 1
 
     </select>
 
