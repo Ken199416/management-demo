@@ -84,7 +84,11 @@ public class UserController {
     }
 
 
-
+    @PostMapping("/updatePassword")
+    public ResponseData updatePassword(@RequestBody User user){
+        userService.update(user);
+        return new ResponseData(200,"修改成功",null);
+    }
 
 
 

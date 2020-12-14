@@ -57,15 +57,15 @@
     <update id="update">
         update management_paper.User
         <set>
-            <if test="userName != null and userName != ''">
-                user_name = #{userName},
-            </if>
+<!--            <if test="userName != null and userName != ''">-->
+<!--                user_name = #{userName},-->
+<!--            </if>-->
             <if test="password != null and password != ''">
                 password = #{password},
             </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
+<!--            <if test="status != null">-->
+<!--                status = #{status},-->
+<!--            </if>-->
         </set>
         where id = #{id}
     </update>

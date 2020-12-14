@@ -4,6 +4,7 @@ import app.entity.User;
 import app.dao.UserDao;
 import app.service.UserService;
 import app.utils.CommonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -67,6 +68,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User update(User user) {
+//        如果密码不为空,将密码加密
+        if (StringUtils.isNotBlank(user.getPassword())){
+            user.setPassword(CommonUtils.encoderPassword(user.getPassword()));
+        }
         this.userDao.update(user);
         return this.queryById(user.getId());
     }
