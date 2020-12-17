@@ -32,7 +32,7 @@ public interface UserDao {
      * @param limit 查询条数
      * @return 对象列表
      */
-    List<User> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+    List<User> queryAllByLimit(@Param("query") String query,@Param("offset") int offset, @Param("limit") int limit);
 
 
     /**
@@ -69,5 +69,7 @@ public interface UserDao {
 
 
     User queryByUserName(User user);
+
+    int getUserCountBySearch(String query);
 
 }

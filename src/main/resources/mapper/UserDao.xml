@@ -21,8 +21,14 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          id, user_name, password, status
+          *
         from management_paper.User
+        <where>
+            <if test="query != null and query != ''">
+                and user_name = #{query}
+            </if>
+        </where>
+        order by id desc
         limit #{offset}, #{limit}
     </select>
 
@@ -80,5 +86,16 @@
         select * from management_paper.User where user_name = #{userName} and status = 1
 
     </select>
+
+    <select id="getUserCountBySearch" resultType="int">
+        select
+        count(*)
+        from management_paper.User
+        <where>
+            <if test="query != null and query != ''">
+                and user_name = #{query}
+            </if>
+        </where>
+</select>
 
 </mapper>

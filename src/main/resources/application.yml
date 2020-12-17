@@ -27,3 +27,6 @@ spring:
 mybatis:
   type-aliases-package: app.entity #dao层实体的路径
   mapper-locations: classpath:mapper/*.xml #默认读取mapper.xml的路径
+logging:
+  level:
+    app.dao: debug

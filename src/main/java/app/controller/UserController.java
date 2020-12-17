@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表控制层
@@ -63,7 +66,7 @@ public class UserController {
 //        判断密码是否正确，如正确，将token返回
         if ( resultUser != null && CommonUtils.verifyPassword(user.getPassword(),resultUser.getPassword())){
             String token = JwtTokenUtils.generatorToken(new JWTInfo(resultUser.getId()+""));
-            return new ResponseData(10000,"登录成功",token);
+            return new ResponseData(200,"登录成功",token);
         }
         LOGGER.info("登录失败");
         return new ResponseData(9999,"登录失败，请检查用户名和密码",null);
@@ -88,6 +91,18 @@ public class UserController {
     public ResponseData updatePassword(@RequestBody User user){
         userService.update(user);
         return new ResponseData(200,"修改成功",null);
+    }
+
+    @RequestMapping("/queryUser")
+    public Map<String,Object> getUsers(String query , int pageNum , int pageSize){
+        List<User> userList = userService.getUserBySearch(query,pageNum,pageSize);
+        int rows = userService.getUserCountBySearch(query);
+        Map<String,Object> response = new HashMap<>();
+        response.put("code",200);
+        response.put("message","查询成功");
+        response.put("data",userList);
+        response.put("total",rows);
+        return response;
     }
 
 

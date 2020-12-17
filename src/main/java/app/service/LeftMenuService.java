@@ -1,15 +1,16 @@
 package app.service;
 
-import app.entity.User;
+import app.entity.LeftMenu;
+
 import java.util.List;
 
 /**
- * (User)表服务接口
+ * 左侧菜单(LeftMenu)表服务接口
  *
  * @author makejava
- * @since 2020-11-28 20:01:32
+ * @since 2020-12-16 15:33:03
  */
-public interface UserService {
+public interface LeftMenuService {
 
     /**
      * 通过ID查询单条数据
@@ -17,32 +18,32 @@ public interface UserService {
      * @param id 主键
      * @return 实例对象
      */
-    User queryById(Integer id);
+    LeftMenu queryById(Integer id);
 
     /**
      * 查询多条数据
      *
      * @param offset 查询起始位置
-     * @param limit 查询条数
+     * @param limit  查询条数
      * @return 对象列表
      */
-    List<User> queryAllByLimit(int offset, int limit);
+    List<LeftMenu> queryAllByLimit(int offset, int limit);
 
     /**
      * 新增数据
      *
-     * @param user 实例对象
+     * @param leftMenu 实例对象
      * @return 实例对象
      */
-    User insert(User user);
+    LeftMenu insert(LeftMenu leftMenu);
 
     /**
      * 修改数据
      *
-     * @param user 实例对象
+     * @param leftMenu 实例对象
      * @return 实例对象
      */
-    User update(User user);
+    LeftMenu update(LeftMenu leftMenu);
 
     /**
      * 通过主键删除数据
@@ -52,10 +53,6 @@ public interface UserService {
      */
     boolean deleteById(Integer id);
 
-    User login(User user);
+    List<LeftMenu> queryAll();
 
-
-    List<User> getUserBySearch(String query, int pageNum, int pageSize);
-
-    int getUserCountBySearch(String query);
 }

@@ -8,7 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表服务实现类
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> queryAllByLimit(int offset, int limit) {
-        return this.userDao.queryAllByLimit(offset, limit);
+        return this.userDao.queryAllByLimit("",offset, limit);
     }
 
     /**
@@ -90,6 +92,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(User user) {
         return userDao.queryByUserName(user);
+    }
+
+    @Override
+    public List<User> getUserBySearch(String query, int pageNum, int pageSize) {
+        return userDao.queryAllByLimit(query,(pageNum-1) * pageSize,pageSize);
+    }
+
+    @Override
+    public int getUserCountBySearch(String query) {
+        return userDao.getUserCountBySearch(query);
     }
 
 

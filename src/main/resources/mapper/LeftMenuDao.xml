@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.dao.LeftMenuDao">
+
+    <resultMap type="app.entity.LeftMenu" id="LeftMenuMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
+        <result property="leave" column="leave" jdbcType="INTEGER"/>
+        <result property="parent" column="parent" jdbcType="INTEGER"/>
+        <result property="pri" column="pri" jdbcType="INTEGER"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LeftMenuMap">
+        select *
+        from management_paper.left_menu
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LeftMenuMap">
+        select *
+        from management_paper.left_menu
+        limit #{offset}, #{limit}
+    </select>
+
+
+
+    <!--通过实体作为筛选条件查询-->
+        <select id="getAll" resultMap="LeftMenuMap" parameterType="int">
+            select * from management_paper.left_menu where id IN ( select id from management_paper.left_menu where parent = #{parent}) and menu_status = 1 order by pri;
+        </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.left_menu(menu_name, leave, parent, pri, icon, path)
+        values (#{menuName}, #{leave}, #{parent}, #{pri}, #{icon}, #{path})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.left_menu(menu_name, leave, parent, pri, icon, path)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.menuName}, #{entity.leave}, #{entity.parent}, #{entity.pri}, #{entity.icon}, #{entity.path})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.left_menu(menu_name, leave, parent, pri, icon, path)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.menuName}, #{entity.leave}, #{entity.parent}, #{entity.pri}, #{entity.icon}, #{entity.path})
+        </foreach>
+        on duplicate key update
+        menu_name = values(menu_name) , leave = values(leave) , parent = values(parent) , pri = values(pri) , icon =
+        values(icon) , path = values(path)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update management_paper.left_menu
+        <set>
+            <if test="menuName != null and menuName != ''">
+                menu_name = #{menuName},
+            </if>
+            <if test="leave != null">
+                leave = #{leave},
+            </if>
+            <if test="parent != null">
+                parent = #{parent},
+            </if>
+            <if test="pri != null">
+                pri = #{pri},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
+            </if>
+            <if test="path != null and path != ''">
+                path = #{path},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from management_paper.left_menu
+        where id = #{id}
+    </delete>
+
+</mapper>
