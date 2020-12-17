@@ -60,16 +60,18 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseData login(@RequestBody User user){
+    public Map<String,Object> login(@RequestBody User user){
 //        根据用户名获取对应的用户信息
         User resultUser = userService.login(user);
 //        判断密码是否正确，如正确，将token返回
         if ( resultUser != null && CommonUtils.verifyPassword(user.getPassword(),resultUser.getPassword())){
             String token = JwtTokenUtils.generatorToken(new JWTInfo(resultUser.getId()+""));
-            return new ResponseData(200,"登录成功",token);
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("customerName",user.getUserName());
+            return CommonUtils.bean2Map(new ResponseData(200,"登陆成功",token),map);
         }
         LOGGER.info("登录失败");
-        return new ResponseData(9999,"登录失败，请检查用户名和密码",null);
+        return CommonUtils.bean2Map(new ResponseData(9999,"登录失败，请检查用户名和密码",null),new HashMap());
     }
 
     /**
