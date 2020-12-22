@@ -56,8 +56,8 @@ public class CommonUtils {
         return map;
     }
 
-    public static String getMethodName(String fildeName) throws Exception{
-        byte[] items = fildeName.getBytes();
+    public static String getMethodName(String fieldName) throws Exception{
+        byte[] items = fieldName.getBytes();
         items[0] = (byte) ((char) items[0] - 'a' + 'A');
         return new String(items);
     }

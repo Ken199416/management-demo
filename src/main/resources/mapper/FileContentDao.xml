@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.dao.FileContentDao">
+
+    <resultMap type="app.entity.FileContent" id="FileContentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+        <result property="fileContent" column="file_content" jdbcType="CLOB"/>
+        <result property="isNode" column="is_Node" jdbcType="INTEGER"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="isShowAdd" column="is_show_add" jdbcType="INTEGER"/>
+
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FileContentMap">
+        select id,
+               file_name,
+               file_content,
+               is_Node,
+               parent_id,
+               create_time,
+               update_time,
+               status
+        from management_paper.file_content
+        where id = #{id}
+    </select>
+
+
+    <select id="queryNode" resultMap="FileContentMap">
+        select
+            *
+        from management_paper.file_content WHERE is_Node = 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryFolder" resultMap="FileContentMap">
+        select
+        *
+        from management_paper.file_content WHERE is_Node = 0
+    </select>
+
+    <select id="queryByParent" resultMap="FileContentMap">
+        select
+            *
+        from management_paper.file_content WHERE parent_id = #{parentId}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.file_content(file_name, file_content, is_Node, parent_id, create_time, update_time,
+                                                  status)
+        values (#{fileName}, #{fileContent}, #{isNode}, #{parentId}, #{createTime}, #{updateTime}, #{status})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.file_content(file_name, file_content, is_Node, parent_id, create_time, update_time,
+        status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.fileName}, #{entity.fileContent}, #{entity.isNode}, #{entity.parentId}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.status})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.file_content(file_name, file_content, is_Node, parent_id, create_time, update_time,
+        status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.fileName}, #{entity.fileContent}, #{entity.isNode}, #{entity.parentId}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.status})
+        </foreach>
+        on duplicate key update
+        file_name = values(file_name) , file_content = values(file_content) , is_Node = values(is_Node) , parent_id =
+        values(parent_id) , create_time = values(create_time) , update_time = values(update_time) , status =
+        values(status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update management_paper.file_content
+        <set>
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="fileContent != null">
+                file_content = #{fileContent},
+            </if>
+            <if test="isNode != null">
+                is_Node = #{isNode},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from management_paper.file_content
+        where id = #{id}
+    </delete>
+
+</mapper>
