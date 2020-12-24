@@ -77,4 +77,6 @@ public interface FileContentDao {
      */
     int deleteById(Integer id);
 
+    List<FileContent> getTree(Integer parentId);
+
 }

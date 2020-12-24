@@ -3,9 +3,7 @@ package app.controller;
 import app.entity.FileContent;
 import app.service.FileContentService;
 import app.vo.ResponseData;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,9 +33,21 @@ public class FileContentController {
         return new ResponseData(200,"查询成功",fileContentService.queryAll());
     }
 
+    @GetMapping("getTree")
+    public ResponseData getTree() {
+        return new ResponseData(200,"查询成功",fileContentService.getTree());
+    }
+
     @GetMapping("/getNodeById")
     public ResponseData getNodeById(Integer id){
         return new ResponseData(200,"查询成功",fileContentService.queryById(id));
     }
+
+    @PostMapping("/updateFile")
+    public ResponseData updateFile(@RequestBody FileContent fileContent){
+        return new ResponseData(200,"修改成功",fileContentService.update(fileContent));
+    }
+
+
 
 }

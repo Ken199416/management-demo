@@ -52,4 +52,7 @@ public interface FileContentService {
      */
     boolean deleteById(Integer id);
 
+
+    List<FileContent> getTree();
+
 }

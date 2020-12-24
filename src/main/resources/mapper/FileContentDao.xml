@@ -79,7 +79,6 @@
         values(parent_id) , create_time = values(create_time) , update_time = values(update_time) , status =
         values(status)
     </insert>
-
     <!--通过主键修改数据-->
     <update id="update">
         update management_paper.file_content
@@ -87,7 +86,7 @@
             <if test="fileName != null and fileName != ''">
                 file_name = #{fileName},
             </if>
-            <if test="fileContent != null">
+            <if test="fileContent != null and fileContent != ''">
                 file_content = #{fileContent},
             </if>
             <if test="isNode != null">
@@ -99,12 +98,10 @@
             <if test="createTime != null">
                 create_time = #{createTime},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
             <if test="status != null">
                 status = #{status},
             </if>
+            update_time = now()
         </set>
         where id = #{id}
     </update>
@@ -115,5 +112,11 @@
         from management_paper.file_content
         where id = #{id}
     </delete>
+
+    <select id="getTree" resultMap="FileContentMap">
+        select
+            id, file_name, is_Node
+        from management_paper.file_content WHERE parent_id = #{parentId}
+    </select>
 
 </mapper>
