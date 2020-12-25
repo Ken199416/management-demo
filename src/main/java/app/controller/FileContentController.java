@@ -35,7 +35,7 @@ public class FileContentController {
 
     @GetMapping("getTree")
     public ResponseData getTree() {
-        return new ResponseData(200,"查询成功",fileContentService.getTree());
+        return ResponseData.success(fileContentService.getTree());
     }
 
     @GetMapping("/getNodeById")

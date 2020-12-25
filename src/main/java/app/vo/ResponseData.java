@@ -16,4 +16,8 @@ public class ResponseData {
         this.message = massage;
         this.data = data;
     }
+
+    public static ResponseData success(Object data){
+        return new ResponseData(200,"success",data);
+    }
 }
