@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
 //        3、排除拦截的那些url
         registry.addInterceptor(new LoginHandlerInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login","/user/register");
+                .excludePathPatterns("/user/login","/user/register","/user/activate");
     }
 
 
