@@ -3,8 +3,6 @@ package app.service.impl;
 import app.dao.FileContentDao;
 import app.entity.FileContent;
 import app.service.FileContentService;
-import org.omg.CORBA.PUBLIC_MEMBER;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -110,7 +108,7 @@ public class FileContentServiceImpl implements FileContentService {
         List<FileContent> result = new ArrayList<>();
 //        通过顶级父节点向下寻找所有的子节点
         for (FileContent fileContent : fileContents) {
-            result.add(getFileContent(fileContent));
+            result.add(getFileTree(fileContent));
         }
         return result;
     }
@@ -126,6 +124,23 @@ public class FileContentServiceImpl implements FileContentService {
         List<FileContent> childrenList = new ArrayList<>();
         //        用当前节点的id去查询所有的子节点
         List<FileContent> childrenFileContents = fileContentDao.getTree(fileContent.getId());
+        for (FileContent children : childrenFileContents) {
+//            是node节点。则把这个子节点加入到子节点list中
+            if (children.getIsNode()==1){
+                childrenList.add(children);
+            }else {
+//                不是node节点，说明下面可能还有节点，需要递归查询
+                childrenList.add(getFileTree(children));
+            }
+        }
+        fileContent.setChildren(childrenList);
+        return fileContent;
+    }
+
+
+    public FileContent getTreeNew(FileContent fileContent){
+        List<FileContent> childrenList = new ArrayList<>();
+        List<FileContent> childrenFileContents = fileContentDao.getTree(fileContent.getParentId());
         for (FileContent children : childrenFileContents) {
 //            是node节点。则把这个子节点加入到子节点list中
             if (children.getIsNode()==1){

@@ -70,6 +70,9 @@ public interface UserDao {
 
     User queryByUserName(User user);
 
-    int getUserCountBySearch(String query);
+    int getUserCountBySearch(User user);
 
+    int getUserByEmail(User user);
+
+    void activate(Integer uid);
 }

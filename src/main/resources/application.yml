@@ -19,9 +19,18 @@ spring:
     username: root
     password: test666
     type: com.alibaba.druid.pool.DruidDataSource #数据源类型
-    url: jdbc:mysql://www.94hmj.com:3308
+    url: jdbc:mysql://www.haomingjian.top:3308
   jackson:
     property-naming-strategy: LOWER_CAMEL_CASE #json转换的格式
+  mail:
+    host: smtp.163.com
+    port: 465
+    username: ft_ken@163.com
+    password: KPLPGENXXQECBLGH
+    default-encoding: UTF-8
+    properties.mail.stmp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+    properties.mail.smtp.ssl.enable:  true
+    properties.mail.debug: true
 
 
 mybatis:

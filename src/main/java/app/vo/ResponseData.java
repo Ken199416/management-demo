@@ -11,13 +11,17 @@ public class ResponseData {
     public ResponseData() {
     }
 
-    public ResponseData(int code, String massage, Object data) {
+    public ResponseData(int code, String message, Object data) {
         this.code = code;
-        this.message = massage;
+        this.message = message;
         this.data = data;
     }
 
     public static ResponseData success(Object data){
         return new ResponseData(200,"success",data);
+    }
+
+    public static ResponseData success(String message,Object data){
+        return new ResponseData(200,message,data);
     }
 }

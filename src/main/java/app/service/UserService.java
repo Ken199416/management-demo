@@ -57,5 +57,5 @@ public interface UserService {
 
     List<User> getUserBySearch(String query, int pageNum, int pageSize);
 
-    int getUserCountBySearch(String query);
+    int getUserCountBySearch(User user);
 }

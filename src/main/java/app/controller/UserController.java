@@ -1,14 +1,21 @@
 package app.controller;
 
+import app.dao.EmailCodeDao;
+import app.dao.UserDao;
+import app.entity.EmailCode;
 import app.entity.JWTInfo;
 import app.entity.User;
+import app.service.EmailService;
 import app.service.UserService;
 import app.utils.CommonUtils;
 import app.utils.JwtTokenUtils;
 import app.vo.ResponseData;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.dc.pr.PRError;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +40,15 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private EmailCodeDao emailCodeDao;
+
     /**
      * 通过主键查询单条数据
      *
@@ -53,9 +69,26 @@ public class UserController {
         if (userService.login(user) != null){
             return new ResponseData(401,"用户名[" + user.getUserName() + "]已存在",null);
         }
-//        用户名不存在，创建用户
-         User registerUser = userService.insert(user);
-         return new ResponseData(200,"注册成功",registerUser);
+        if (userDao.getUserByEmail(user) != 0){
+            return new ResponseData(402,"邮箱：" + user.getEmail() + "已存在",user);
+        }
+//        用户名不存在，创建用户,发送邮件
+        User registerUser = userService.insert(user);
+        emailService.sendEmail(user);
+        return new ResponseData(200,"您的账号已注册成功，验证码已发送至您的邮箱，输入验证码后即可激活账户",registerUser.getId());
+    }
+
+//    激活账号
+    @GetMapping("/activate")
+    public ResponseData activate(Integer uid,String emailCode){
+        int len = emailCodeDao.activate(uid,emailCode);
+        if (len == 0){
+            return new ResponseData(401,"验证码错误，请重试",null);
+        }
+//        将用户状态置位有效,验证码置位失效
+        userDao.activate(uid);
+        emailCodeDao.expiryCode(uid,emailCode);
+        return ResponseData.success("恭喜您，账号已激活！",emailCode);
     }
 
 
@@ -98,7 +131,9 @@ public class UserController {
     @RequestMapping("/queryUser")
     public Map<String,Object> getUsers(String query , int pageNum , int pageSize){
         List<User> userList = userService.getUserBySearch(query,pageNum,pageSize);
-        int rows = userService.getUserCountBySearch(query);
+        User user = new User();
+        user.setUserName(query);
+        int rows = userService.getUserCountBySearch(user);
         Map<String,Object> response = new HashMap<>();
         response.put("code",200);
         response.put("message","查询成功");
@@ -106,7 +141,6 @@ public class UserController {
         response.put("total",rows);
         return response;
     }
-
 
 
 }

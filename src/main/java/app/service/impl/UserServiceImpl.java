@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserCountBySearch(String query) {
-        return userDao.getUserCountBySearch(query);
+    public int getUserCountBySearch(User user) {
+        return userDao.getUserCountBySearch(user);
     }
 
 

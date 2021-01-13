@@ -55,4 +55,5 @@ public interface FileContentService {
 
     List<FileContent> getTree();
 
+    FileContent getTreeNew(FileContent fileContent);
 }

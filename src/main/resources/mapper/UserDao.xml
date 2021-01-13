@@ -8,12 +8,13 @@
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
     </resultMap>
+
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
-        select
-          id, user_name, password, status
+        select *
         from management_paper.User
         where id = #{id}
     </select>
@@ -50,13 +51,16 @@
             <if test="status != null">
                 and status = #{status}
             </if>
+            <if test="email != null">
+                and email = #{email}
+            </if>
         </where>
     </select>
 
     <!--新增用户-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" >
-        insert into management_paper.User(user_name, password, status)
-        values (#{userName}, #{password}, #{status})
+        insert into management_paper.User(user_name, password, status,email)
+        values (#{userName}, #{password}, 0,#{email})
     </insert>
 
     <!--通过主键修改数据-->
@@ -87,15 +91,34 @@
 
     </select>
 
+    <!--  获取查询结构的总数  -->
     <select id="getUserCountBySearch" resultType="int">
         select
         count(*)
         from management_paper.User
         <where>
-            <if test="query != null and query != ''">
-                and user_name = #{query}
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="email != null">
+                and email = #{email}
             </if>
         </where>
 </select>
 
+
+
+    <select id="getUserByEmail" resultType="int">
+        select COUNT(*) from management_paper.User where email = #{email}
+    </select>
+
+    <update id="activate">
+        update management_paper.User set status = 1 where id = #{id}
+    </update>
 </mapper>

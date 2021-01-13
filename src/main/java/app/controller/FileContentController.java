@@ -2,11 +2,15 @@ package app.controller;
 
 import app.entity.FileContent;
 import app.service.FileContentService;
+import app.utils.CommonUtils;
 import app.vo.ResponseData;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (FileContent)表控制层
@@ -48,6 +52,21 @@ public class FileContentController {
         return new ResponseData(200,"修改成功",fileContentService.update(fileContent));
     }
 
+
+    @PostMapping("/add")
+    public Map<String, Object> add(@RequestBody FileContent fileContent){
+        Map<String,Object> map = new HashMap<>();
+        map = CommonUtils.bean2Map(ResponseData.success(fileContentService.insert(fileContent)),map);
+        map.put("tree",fileContentService.getTree());
+        return map;
+    }
+
+    @GetMapping("/getTreeNew")
+    public ResponseData getTreeNew(){
+        FileContent fileContent = new FileContent();
+        fileContent.setParentId(0);
+        return ResponseData.success(fileContentService.getTreeNew(fileContent));
+    }
 
 
 }
