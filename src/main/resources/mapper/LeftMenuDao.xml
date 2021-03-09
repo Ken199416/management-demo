@@ -91,4 +91,13 @@
         where id = #{id}
     </delete>
 
+
+    <select id="getUserAll" resultMap="LeftMenuMap">
+        select * from management_paper.left_menu
+        where id IN ( select id from management_paper.left_menu where parent = #{parent} and id in
+            <foreach collection="userMenusIds" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+            </foreach>)
+          and menu_status = 1 order by pri;
+    </select>
 </mapper>

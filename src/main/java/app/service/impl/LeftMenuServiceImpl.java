@@ -2,10 +2,15 @@ package app.service.impl;
 
 import app.dao.LeftMenuDao;
 import app.entity.LeftMenu;
+import app.entity.UserPermission;
 import app.service.LeftMenuService;
+import app.service.UserPermissionService;
+import app.utils.JwtTokenUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +23,9 @@ import java.util.List;
 public class LeftMenuServiceImpl implements LeftMenuService {
     @Resource
     private LeftMenuDao leftMenuDao;
+
+    @Resource
+    private UserPermissionService userPermissionService;
 
     /**
      * 通过ID查询单条数据
@@ -87,5 +95,27 @@ public class LeftMenuServiceImpl implements LeftMenuService {
             menuList.setChlidren(leftMenuDao.getAll(menuList.getId()));
         }
         return menuLists;
+    }
+
+    @Override
+    public List<LeftMenu> queryUserMenuList(HttpServletRequest request) {
+//        用户应该有的权限的Id列表
+        List<Integer> userMenusIds = new ArrayList<>();
+//        通过request中的token获取当前登录的用户id
+        String userId = JwtTokenUtils.getTokenInfo(request.getHeader("Authorization")).getUid();
+//        通过用户id查到用户拥有的权限关系
+        UserPermission userPermission = new UserPermission();
+        userPermission.setUserId(Integer.parseInt(userId));
+        List<UserPermission> userPermissions = userPermissionService.getPermissionByUserId(userPermission);
+//        通过权限关系，找到用户拥有的所有权限，并返回
+        for (UserPermission up : userPermissions) {
+            userMenusIds.add(up.getRoutePathId());
+        }
+        List<LeftMenu> menuLists = leftMenuDao.getUserAll(0,userMenusIds);
+        for (LeftMenu menuList: menuLists) {
+//            把当前的id作为父id再去查询是否有下级目录
+            menuList.setChlidren(leftMenuDao.getUserAll(menuList.getId(),userMenusIds));
+        }
+         return menuLists;
     }
 }

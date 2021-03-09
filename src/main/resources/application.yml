@@ -19,7 +19,7 @@ spring:
     username: root
     password: test666
     type: com.alibaba.druid.pool.DruidDataSource #数据源类型
-    url: jdbc:mysql://www.haomingjian.top:3308
+    url: jdbc:mysql://www.haomingjian.top:3309
   jackson:
     property-naming-strategy: LOWER_CAMEL_CASE #json转换的格式
   mail:
@@ -30,7 +30,7 @@ spring:
     default-encoding: UTF-8
     properties.mail.stmp.socketFactory.class: javax.net.ssl.SSLSocketFactory
     properties.mail.smtp.ssl.enable:  true
-    properties.mail.debug: true
+    properties.mail.debug: false
 
 
 mybatis:

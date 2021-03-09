@@ -1,17 +1,16 @@
 package app.service;
 
-import app.entity.LeftMenu;
+import app.entity.UserPermission;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 左侧菜单(LeftMenu)表服务接口
+ * 用户权限表(UserPermission)表服务接口
  *
  * @author makejava
- * @since 2020-12-16 15:33:03
+ * @since 2021-01-16 12:47:30
  */
-public interface LeftMenuService {
+public interface UserPermissionService {
 
     /**
      * 通过ID查询单条数据
@@ -19,7 +18,7 @@ public interface LeftMenuService {
      * @param id 主键
      * @return 实例对象
      */
-    LeftMenu queryById(Integer id);
+    UserPermission queryById(Integer id);
 
     /**
      * 查询多条数据
@@ -28,23 +27,23 @@ public interface LeftMenuService {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<LeftMenu> queryAllByLimit(int offset, int limit);
+    List<UserPermission> queryAllByLimit(int offset, int limit);
 
     /**
      * 新增数据
      *
-     * @param leftMenu 实例对象
+     * @param userPermission 实例对象
      * @return 实例对象
      */
-    LeftMenu insert(LeftMenu leftMenu);
+    UserPermission insert(UserPermission userPermission);
 
     /**
      * 修改数据
      *
-     * @param leftMenu 实例对象
+     * @param userPermission 实例对象
      * @return 实例对象
      */
-    LeftMenu update(LeftMenu leftMenu);
+    UserPermission update(UserPermission userPermission);
 
     /**
      * 通过主键删除数据
@@ -54,7 +53,7 @@ public interface LeftMenuService {
      */
     boolean deleteById(Integer id);
 
-    List<LeftMenu> queryAll();
 
-    List<LeftMenu> queryUserMenuList(HttpServletRequest request);
+    List<UserPermission> getPermissionByUserId(UserPermission userPermission);
+
 }

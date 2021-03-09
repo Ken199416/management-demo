@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -37,8 +38,9 @@ public class LeftMenuController {
     }
 
     @GetMapping("/getAll")
-    public ResponseData getAll(){
-        List<LeftMenu> data= leftMenuService.queryAll();
+    public ResponseData getAll(HttpServletRequest request){
+//        List<LeftMenu> data= leftMenuService.queryAll();
+        List<LeftMenu> data = leftMenuService.queryUserMenuList(request);
         return new ResponseData(200,"查询左侧列表成功",data);
     }
 

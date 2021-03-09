@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.dao.UserPermissionDao">
+
+    <resultMap type="app.entity.UserPermission" id="UserPermissionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="routePathId" column="route_path_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserPermissionMap">
+        select id,
+               user_id,
+               route_path_id
+        from management_paper.user_permission
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserPermissionMap">
+        select id,
+               user_id,
+               route_path_id
+        from management_paper.user_permission
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserPermissionMap">
+        select
+        id, user_id, route_path_id
+        from management_paper.user_permission
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="routePathId != null">
+                and route_path_id = #{routePathId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.user_permission(user_id, route_path_id)
+        values (#{userId}, #{routePathId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.user_permission(user_id, route_path_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.routePathId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into management_paper.user_permission(user_id, route_path_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.routePathId})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id) , route_path_id = values(route_path_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update management_paper.user_permission
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="routePathId != null">
+                route_path_id = #{routePathId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from management_paper.user_permission
+        where id = #{id}
+    </delete>
+
+    <select id="getPermissionByUserId" resultMap="UserPermissionMap">
+        select * from management_paper.user_permission where user_id = #{userId}
+    </select>
+
+</mapper>
